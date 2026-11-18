@@ -111,7 +111,7 @@ const refreshAccessToken = async (req, res) => {
 const logoutUser = async ( req, res ) => {
   const refreshToken = req.cookies.jwt_refresh;
   if(refreshToken) {
-    await pool.query('UPDATE users SET refresh_token = NULL WHERE refresh_token $1', [refreshToken]);
+    await pool.query('UPDATE users SET refresh_token = NULL WHERE refresh_token = $1', [refreshToken]);
   }
 
   res.clearCookie('jwt_refresh', { httpOnly: true, sameSite: 'strict' });
@@ -157,7 +157,7 @@ const updateUser = async (req, res) => {
   }
 
   try {
-    // Hash the new password if the user provided one ---------------------------------------------------------------------------------------------------------
+    // Hash the new password if the user provided one 
     let hashedPassword = null;
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
